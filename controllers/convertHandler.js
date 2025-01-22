@@ -113,7 +113,8 @@ function ConvertHandler() {
       default:
         result = null;
     }
-    return result;
+    if(result) result = result.toFixed(5);
+    return result*1;
   };
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
