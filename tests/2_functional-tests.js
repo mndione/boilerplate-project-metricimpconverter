@@ -9,7 +9,7 @@ suite('Functional Tests', function() {
     this.timeout(5000);
 
     // #1
-    test('Test GET /api/convert?input=10L', function (done) {
+    test('Test GET valid input', function (done) {
         chai
           .request(server)
           .keepOpen()
@@ -22,7 +22,7 @@ suite('Functional Tests', function() {
       });
     
      // #2
-     test('Test GET /api/convert?input=32g', function (done) {
+     test('Test GET invalid input', function (done) {
         chai
           .request(server)
           .keepOpen()
@@ -35,7 +35,7 @@ suite('Functional Tests', function() {
       });
 
      // #3
-     test('Test GET /api/convert?input=3/7.2/4kg', function (done) {
+     test('Test GET invalid number', function (done) {
         chai
           .request(server)
           .keepOpen()
@@ -47,8 +47,8 @@ suite('Functional Tests', function() {
           });
       });
 
-       // #3
-     test('Test GET /api/convert?input=3/7.2/4kilomegagram', function (done) {
+    // #4
+     test('Test GET invalid number and unit', function (done) {
         chai
           .request(server)
           .keepOpen()
@@ -56,6 +56,19 @@ suite('Functional Tests', function() {
           .end(function (err, res) {
             assert.equal(res.status, 200);
             assert.equal(res.text, "invalid number and unit");
+            done();
+          });
+      });
+
+    // #5
+    test('Test GET valid unit without number', function (done) {
+        chai
+          .request(server)
+          .keepOpen()
+          .get('/api/convert?input=kg')
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.text, '{"initNum":1,"initUnit":"kg","returnNum":2.2046244201837775,"returnUnit":"lbs","string":"1 kilograms converts to 2.2046244201837775 pounds"}');
             done();
           });
       });
